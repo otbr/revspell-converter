@@ -10,9 +10,9 @@ RevSpell Converter reads `spells.xml` from a TFS-based server and generates mode
   - Runes use XML `itemID`
   - Normal and conjuring spells use sequential IDs starting from a base (default `100`)
 - Output structure
-  - `saida/runes/{group}/...`
-  - `saida/spells/{group}/...`
-  - `saida/conjuring/...`
+  - `converter/runes/{group}/...`
+  - `converter/spells/{group}/...`
+  - `converter/conjuring/...`
 - Lua generation
   - Keeps original Lua combat on top and calls `combat:execute(creature, var)`
   - Adds required spell configs (group, id, name, words, level, mana, vocations)
@@ -58,12 +58,58 @@ cargo tauri build
 1. Open the app
 2. Click “Escolher Pasta” / “Choose Folder” and select the folder containing `spells.xml`
 3. Set Base ID if needed (default `100`)
-4. Click “Salvar RevScripts”
-5. Generated files are placed under `saida/` following the folder rules above
+4. Click “Converter RevScripts”
+5. Generated files are placed under `converter/` following the folder rules above
+
+## Deployment (Install on your OT server)
+
+After clicking “Converter RevScripts”, open the output folder:
+- Default output root: `converter/`
+- Optionally rename `converter/` to `spells/` if your server expects that name
+
+Copy the generated scripts to your server:
+- Spells (instant): `converter/spells/{group}/...` → place under your server `data/scripts/spells/`
+- Runes: `converter/runes/{group}/...` → place under `data/scripts/runes/` (or your runes script folder)
+- Conjuring: `converter/conjuring/...` → place under `data/scripts/spells/` (they are `Spell("instant")` with words)
+
+Notes:
+- Keep folder structure by group (attack, support, healing) or flatten if your server expects a flat layout
+- RevScript files already call `spell:register()`, so no XML registration is required
+- If your distribution uses a different RevScript root, adjust paths accordingly (e.g., `data/scripts/`)
+
+### Instalação (PT-BR)
+
+Depois de clicar em “Converter RevScripts”, abra a pasta de saída:
+- Raiz padrão: `converter/` (você pode renomear para `spells/` se seu OT exigir)
+
+Copie os scripts para seu servidor:
+- Spells normais: `converter/spells/{group}/...` → `data/scripts/spells/`
+- Runes: `converter/runes/{group}/...` → `data/scripts/runes/`
+- Conjuração: `converter/conjuring/...` → `data/scripts/spells/`
+
+Observações:
+- Mantenha a estrutura por grupos ou ajuste conforme o seu OT
+- Os RevScripts já fazem `spell:register()`, não precisa cadastrar no XML
 
 ## Contributing
 
 Pull requests are welcome. Just make sure you are using English language.
+
+### How to Contribute
+
+- Fork the project
+- Create a feature branch: `git checkout -b feature/new-feature`
+- Commit your changes: `git commit -am 'Add new feature'`
+- Push the branch: `git push origin feature/new-feature`
+- Open a Pull Request
+
+### Como Contribuir
+
+- Fork o projeto
+- Crie uma branch para sua feature: `git checkout -b feature/nova-feature`
+- Commit suas mudanças: `git commit -am 'Adiciona nova feature'`
+- Push para a branch: `git push origin feature/nova-feature`
+- Abra um Pull Request
 
 Suggested areas to improve:
 - Support for additional XML attributes and edge cases
