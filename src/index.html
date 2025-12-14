@@ -91,6 +91,7 @@
       font-weight: 700;
       box-shadow: 0 0 25px rgba(37, 99, 235, 0.25);
     }
+
     .logo img {
       width: 100%;
       height: 100%;
@@ -98,6 +99,7 @@
       object-fit: cover;
       display: none;
     }
+
     .logo-text {
       font-size: 24px;
       color: #eff6ff;
@@ -254,17 +256,20 @@
     .btn-secondary:hover {
       background: rgba(17, 24, 39, 1);
     }
+
     #clearLogBtn {
       text-transform: none;
       letter-spacing: 0.04em;
       font-weight: 600;
     }
+
     .toolbar {
       margin-left: auto;
       display: inline-flex;
       gap: 8px;
       align-items: center;
     }
+
     .select {
       appearance: none;
       background: rgba(15, 23, 42, 0.9);
@@ -284,15 +289,18 @@
       margin-top: 8px;
       gap: 10px;
     }
+
     .version-selector {
       display: flex;
       gap: 8px;
       margin-top: 6px;
     }
+
     .center-label {
       display: block;
       text-align: center;
     }
+
     .version-btn {
       flex: 1;
       display: flex;
@@ -311,16 +319,19 @@
       letter-spacing: 0.04em;
       line-height: 1.3;
     }
+
     .version-btn:hover {
       background: rgba(17, 24, 39, 1);
       border-color: rgba(96, 165, 250, 0.5);
     }
+
     .version-btn.active {
       background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(29, 78, 216, 0.15));
       border-color: #2563eb;
       color: #60a5fa;
       box-shadow: 0 0 15px rgba(37, 99, 235, 0.3);
     }
+
     .version-desc {
       font-size: 8px;
       color: #6b7280;
@@ -330,6 +341,7 @@
       font-weight: 400;
       line-height: 1.2;
     }
+
     .version-btn.active .version-desc {
       color: #93c5fd;
     }
@@ -369,15 +381,42 @@
       width: 100%;
       border-collapse: collapse;
     }
-    .spells-list th:nth-child(1) { width: 15%; }
-    .spells-list th:nth-child(2) { width: 18%; }
-    .spells-list th:nth-child(3) { width: 10%; }
-    .spells-list th:nth-child(4) { width: 6%; }
-    .spells-list th:nth-child(5) { width: 6%; }
-    .spells-list th:nth-child(6) { width: 5%; }
-    .spells-list th:nth-child(7) { width: 6%; }
-    .spells-list th:nth-child(8) { width: 8%; }
-    .spells-list th:nth-child(9) { width: 20%; }
+
+    .spells-list th:nth-child(1) {
+      width: 15%;
+    }
+
+    .spells-list th:nth-child(2) {
+      width: 18%;
+    }
+
+    .spells-list th:nth-child(3) {
+      width: 10%;
+    }
+
+    .spells-list th:nth-child(4) {
+      width: 6%;
+    }
+
+    .spells-list th:nth-child(5) {
+      width: 6%;
+    }
+
+    .spells-list th:nth-child(6) {
+      width: 5%;
+    }
+
+    .spells-list th:nth-child(7) {
+      width: 6%;
+    }
+
+    .spells-list th:nth-child(8) {
+      width: 8%;
+    }
+
+    .spells-list th:nth-child(9) {
+      width: 20%;
+    }
 
     th,
     td {
@@ -438,6 +477,7 @@
       align-items: center;
       gap: 4px;
     }
+
     #baseId {
       width: 50px;
       border: none;
@@ -446,6 +486,7 @@
       color: #e5e7eb;
       font-size: 12px;
     }
+
     #convertBtn {
       background: linear-gradient(135deg, #1d4ed8, #3b82f6);
       color: white;
@@ -460,6 +501,7 @@
       border-radius: 999px;
       min-width: 100px;
     }
+
     #convertBtn:hover {
       transform: translateY(-1px);
       box-shadow: 0 10px 25px rgba(37, 99, 235, 0.45);
@@ -572,6 +614,7 @@
       border-radius: var(--radius);
       color: var(--text-soft);
     }
+
     .site-footer-grid {
       display: flex;
       flex-direction: column;
@@ -581,22 +624,26 @@
       text-align: center;
       margin-bottom: 10px;
     }
+
     .site-footer-section h3 {
       margin: 0 0 6px 0;
       font-size: 16px;
       color: var(--text);
       letter-spacing: 0.04em;
     }
+
     .site-footer-section p {
       margin: 0;
       font-size: 13px;
     }
+
     .site-footer-section .creation-date {
       display: inline-block;
       margin-top: 6px;
       font-size: 12px;
       color: var(--text-soft);
     }
+
     .site-footer a.footer-link {
       display: inline-flex;
       align-items: center;
@@ -605,9 +652,11 @@
       text-decoration: none;
       font-weight: 600;
     }
+
     .site-footer a.footer-link:hover {
       text-decoration: underline;
     }
+
     .site-footer-bottom {
       border-top: 1px solid var(--border);
       padding-top: 10px;
@@ -841,16 +890,16 @@
         simBadge: "Simulação (Tauri)",
         footerText: "Os arquivos serão salvos na subpasta <b>/converter</b>.",
         clearLogText: "Limpar log"
-        ,versionTargetLabel: "TFS Version Target"
-        ,versionStandardTitle: "TFS 1.5 MILHTORE TFS DOWNGRADE"
-        ,versionStandardDesc: "Sem spellId (Milhtore/Downgrade)"
-        ,versionCustomTitle: "TFS 1.4.2 / 1.5 CUSTOM"
-        ,versionCustomDesc: "Nekiro/Downgrade (com spellId)"
-        ,versionNekiroTitle: "TFS 1.5 NEKIRO STANDARD"
-        ,versionNekiroDesc: "Sem spellId; com groupCooldown"
-        ,headerGenerated: "-- gerado por Spell Converter"
-        ,headerOriginal: "-- script original"
-        ,headerNoOriginal: "-- [Aviso] Script original não encontrado, lógica genérica inserida."
+        , versionTargetLabel: "TFS Version Target"
+        , versionStandardTitle: "TFS 1.5 MILHTORE TFS DOWNGRADE"
+        , versionStandardDesc: "Sem spellId (Milhtore/Downgrade)"
+        , versionCustomTitle: "TFS 1.4.2 / 1.5 CUSTOM"
+        , versionCustomDesc: "Nekiro/Downgrade (com spellId)"
+        , versionNekiroTitle: "TFS 1.5 NEKIRO STANDARD"
+        , versionNekiroDesc: "Sem spellId; com groupCooldown"
+        , headerGenerated: "-- gerado por Spell Converter"
+        , headerOriginal: "-- script original"
+        , headerNoOriginal: "-- [Aviso] Script original não encontrado, lógica genérica inserida."
       },
       en: {
         titleMain: "Spell Converter",
@@ -870,16 +919,16 @@
         simBadge: "Simulation (Tauri)",
         footerText: "Files will be saved under <b>/converter</b>.",
         clearLogText: "Clear log"
-        ,versionTargetLabel: "TFS Version Target"
-        ,versionStandardTitle: "TFS 1.5 MILHTORE TFS DOWNGRADE"
-        ,versionStandardDesc: "No spellId (Milhtore/Downgrade)"
-        ,versionCustomTitle: "TFS 1.4.2 / 1.5 CUSTOM"
-        ,versionCustomDesc: "Nekiro/Downgrade (with spellId)"
-        ,versionNekiroTitle: "TFS 1.5 NEKIRO STANDARD"
-        ,versionNekiroDesc: "No spellId; with groupCooldown"
-        ,headerGenerated: "-- generated by Spell Converter"
-        ,headerOriginal: "-- original script"
-        ,headerNoOriginal: "-- [Warning] Original script not found, generic logic inserted."
+        , versionTargetLabel: "TFS Version Target"
+        , versionStandardTitle: "TFS 1.5 MILHTORE TFS DOWNGRADE"
+        , versionStandardDesc: "No spellId (Milhtore/Downgrade)"
+        , versionCustomTitle: "TFS 1.4.2 / 1.5 CUSTOM"
+        , versionCustomDesc: "Nekiro/Downgrade (with spellId)"
+        , versionNekiroTitle: "TFS 1.5 NEKIRO STANDARD"
+        , versionNekiroDesc: "No spellId; with groupCooldown"
+        , headerGenerated: "-- generated by Spell Converter"
+        , headerOriginal: "-- original script"
+        , headerNoOriginal: "-- [Warning] Original script not found, generic logic inserted."
       }
     };
     function applyLang(lang) {
@@ -1033,7 +1082,7 @@
             const scriptAbsPath = `${pastaEntrada}${sepLocal}scripts${sepLocal}${s.scriptPath}`;
             try {
               originalLua = await tauriAPI.invoke('read_file', { path: scriptAbsPath });
-            } catch (e) {}
+            } catch (e) { }
           }
           const code = generateSingleSpellRevScript(s, originalLua);
           codeOutput.textContent = code;
@@ -1211,115 +1260,147 @@
         ? s.vocations.map(v => `"${v.split(';')[0]}"`).join(", ")
         : "";
 
-      const parts = [];
+      // 1. Calculate properties lines
+      const propLines = [];
+      propLines.push(`spell:group("${s.group || 'support'}")`);
 
-      parts.push(txt("headerGenerated"));
-
-      if (originalLua && originalLua.trim().length > 0) {
-        parts.push(txt("headerOriginal"));
-        let cleanedLua = cleanOldSpellFunction(originalLua);
-        parts.push(cleanedLua);
-        parts.push("");
-      } else {
-        parts.push(txt("headerNoOriginal"));
-        parts.push("local combat = Combat()");
-        parts.push("combat:setParameter(COMBAT_PARAM_TYPE, COMBAT_ENERGYDAMAGE)");
-        parts.push("combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_ENERGYAREA)");
-        parts.push("");
-        parts.push("function onGetFormulaValues(player, level, maglevel)");
-        parts.push("\tlocal min = (level / 5) + (maglevel * 1.4) + 8");
-        parts.push("\tlocal max = (level / 5) + (maglevel * 2.2) + 14");
-        parts.push("\treturn -min, -max");
-        parts.push("end");
-        parts.push("");
-        parts.push("combat:setCallback(CALLBACK_PARAM_LEVELMAGICVALUE, onGetFormulaValues)");
-        parts.push("");
-      }
-
-      parts.push(`local spell = Spell("${spellType}")`);
-      parts.push("");
       if (targetVersion === "standard") {
-        parts.push("function spell.onCastSpell(creature, variant) return combat:execute(creature, variant) end");
+        propLines.push(`spell:id(${id})`);
       } else {
-        parts.push("function spell.onCastSpell(creature, variant, isHotkey)");
-        parts.push("\treturn combat:execute(creature, variant)");
-        parts.push("end");
-      }
-      parts.push("");
-
-      parts.push(`spell:group("${s.group || 'support'}")`);
-      if (targetVersion === "standard") {
-        parts.push(`spell:id(${id})`);
-      } else {
-        parts.push(`spell:id(${id})`);
-        parts.push(`spell:spellId(${id})`);
+        propLines.push(`spell:id(${id})`);
+        propLines.push(`spell:spellId(${id})`);
       }
 
       if (s.isRune && s.runeItemId) {
-        parts.push(`spell:runeId(${s.runeItemId})`);
+        propLines.push(`spell:runeId(${s.runeItemId})`);
       }
 
       if (s.name) {
-        parts.push(`spell:name("${s.name}")`);
+        propLines.push(`spell:name("${s.name}")`);
       }
       if (s.words && !s.isRune) {
-        parts.push(`spell:words("${s.words}")`);
+        propLines.push(`spell:words("${s.words}")`);
       }
       if (s.level) {
-        parts.push(`spell:level(${s.level})`);
+        propLines.push(`spell:level(${s.level})`);
       }
       if (s.mana) {
-        parts.push(`spell:mana(${s.mana})`);
+        propLines.push(`spell:mana(${s.mana})`);
       }
       if (s.soul !== null) {
-        parts.push(`spell:soul(${s.soul})`);
+        propLines.push(`spell:soul(${s.soul})`);
       }
 
       if (s.needWeapon) {
-        parts.push("spell:needWeapon(true)");
+        propLines.push("spell:needWeapon(true)");
       }
 
       if (s.premium) {
-        parts.push("spell:isPremium(true)");
+        propLines.push("spell:isPremium(true)");
       }
 
       if (s.selftarget) {
-        parts.push("spell:isSelfTarget(true)");
+        propLines.push("spell:isSelfTarget(true)");
       }
 
       if (s.range !== null) {
-        parts.push(`spell:range(${s.range})`);
+        propLines.push(`spell:range(${s.range})`);
       }
 
       if (s.needCasterTargetOrDirection === true) {
-        parts.push("spell:needCasterTargetOrDirection(true)");
+        propLines.push("spell:needCasterTargetOrDirection(true)");
       }
 
       if (s.blockwalls === true) {
-        parts.push("spell:blockWalls(true)");
+        propLines.push("spell:blockWalls(true)");
       }
 
       let cooldownMs = s.cooldown || 2000;
       let groupCdMs = s.groupcooldown || 2000;
 
-      parts.push(`spell:cooldown(${Math.round(cooldownMs / 1000)} * 1000)`);
+      propLines.push(`spell:cooldown(${Math.round(cooldownMs / 1000)} * 1000)`);
       if (targetVersion !== "standard") {
-        parts.push(`spell:groupCooldown(${Math.round(groupCdMs / 1000)} * 1000)`);
+        propLines.push(`spell:groupCooldown(${Math.round(groupCdMs / 1000)} * 1000)`);
       }
 
-      parts.push(`spell:needLearn(${s.needlearn ? "true" : "false"})`);
+      propLines.push(`spell:needLearn(${s.needlearn ? "true" : "false"})`);
 
       if (s.aggressive !== null) {
-        parts.push(`spell:isAggressive(${s.aggressive ? "true" : "false"})`);
+        propLines.push(`spell:isAggressive(${s.aggressive ? "true" : "false"})`);
       }
 
       if (vocStr) {
-        parts.push(`spell:vocation(${vocStr})`);
+        propLines.push(`spell:vocation(${vocStr})`);
       }
 
-      parts.push("spell:register()");
-      parts.push("");
+      // 2. Assemble Script
+      const parts = [];
+      parts.push(txt("headerGenerated"));
 
+      let hasOriginalLogic = false;
+      if (originalLua && /function\s+onCastSpell\s*\(/.test(originalLua)) {
+        hasOriginalLogic = true;
+      }
+
+      if (hasOriginalLogic) {
+        parts.push(txt("headerOriginal"));
+        const match = originalLua.match(/function\s+onCastSpell\s*\(/);
+        const idx = match.index;
+        const pre = originalLua.substring(0, idx);
+        const post = originalLua.substring(idx);
+
+        if (pre.trim().length > 0) {
+          parts.push(pre.trimEnd());
+          parts.push("");
+        }
+
+        parts.push(`local spell = Spell("${spellType}")`);
+
+        const renamedPost = post.replace(/function\s+onCastSpell\s*\(/, "function spell.onCastSpell(");
+        parts.push(renamedPost);
+        parts.push("");
+
+        parts.push(propLines.join("\n"));
+        parts.push("spell:register()");
+
+      } else {
+        if (originalLua && originalLua.trim().length > 0) {
+          parts.push(txt("headerOriginal"));
+          parts.push(cleanOldSpellFunction(originalLua));
+          parts.push("");
+        } else {
+          parts.push(txt("headerNoOriginal"));
+          parts.push("local combat = Combat()");
+          parts.push("combat:setParameter(COMBAT_PARAM_TYPE, COMBAT_ENERGYDAMAGE)");
+          parts.push("combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_ENERGYAREA)");
+          parts.push("");
+          parts.push("function onGetFormulaValues(player, level, maglevel)");
+          parts.push("\tlocal min = (level / 5) + (maglevel * 1.4) + 8");
+          parts.push("\tlocal max = (level / 5) + (maglevel * 2.2) + 14");
+          parts.push("\treturn -min, -max");
+          parts.push("end");
+          parts.push("");
+          parts.push("combat:setCallback(CALLBACK_PARAM_LEVELMAGICVALUE, onGetFormulaValues)");
+          parts.push("");
+        }
+
+        parts.push(`local spell = Spell("${spellType}")`);
+        parts.push("");
+
+        if (targetVersion === "standard") {
+          parts.push("function spell.onCastSpell(creature, variant) return combat:execute(creature, variant) end");
+        } else {
+          parts.push("function spell.onCastSpell(creature, variant, isHotkey)");
+          parts.push("\treturn combat:execute(creature, variant)");
+          parts.push("end");
+        }
+        parts.push("");
+
+        parts.push(propLines.join("\n"));
+        parts.push("spell:register()");
+      }
+
+      parts.push("");
       return parts.join("\n");
     }
 
