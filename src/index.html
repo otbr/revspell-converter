@@ -670,6 +670,143 @@
         grid-template-columns: 1fr;
       }
     }
+
+    /* Modal CSS */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-content {
+      background: #0f172a;
+      width: 500px;
+      max-width: 90%;
+      border-radius: 12px;
+      border: 1px solid rgba(31, 41, 55, 1);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      transform: scale(0.95);
+      transition: transform 0.2s ease;
+      overflow: hidden;
+    }
+
+    .modal-overlay.active .modal-content {
+      transform: scale(1);
+    }
+
+    .modal-header {
+      padding: 16px 20px;
+      background: rgba(17, 24, 39, 0.8);
+      border-bottom: 1px solid rgba(31, 41, 55, 1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #e5e7eb;
+      letter-spacing: 0.04em;
+    }
+
+    .modal-body {
+      padding: 20px;
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+
+    .modal-info {
+      font-size: 13px;
+      color: #9ca3af;
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+
+    .checkbox-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(55, 65, 81, 0.5);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .checkbox-item:hover {
+      background: rgba(30, 41, 59, 0.8);
+    }
+
+    .checkbox-item input[type="checkbox"] {
+      accent-color: #2563eb;
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+
+    .checkbox-item span {
+      font-size: 13px;
+      color: #d1d5db;
+      user-select: none;
+    }
+
+    .modal-footer {
+      padding: 16px 20px;
+      background: rgba(15, 23, 42, 0.95);
+      border-top: 1px solid rgba(31, 41, 55, 1);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .btn-danger {
+      background: transparent;
+      border: 1px solid #ef4444;
+      color: #ef4444;
+    }
+
+    .btn-danger:hover {
+      background: rgba(239, 68, 68, 0.1);
+    }
+
+    .link-action {
+      font-size: 12px;
+      color: #60a5fa;
+      cursor: pointer;
+      text-decoration: none;
+      margin-right: auto;
+      align-self: center;
+    }
+
+    .link-action:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 
@@ -711,20 +848,10 @@
           <input type="text" id="basePath" placeholder="Nenhuma pasta selecionada" readonly />
         </div>
         <div class="field">
-          <label class="center-label" id="versionTargetLabel">TFS Version Target</label>
-          <div class="version-selector">
-            <button class="version-btn active" data-version="standard" id="versionStandard">
-              <span class="version-title" id="versionStandardTitle">TFS 1.5 MILHTORE TFS DOWNGRADE</span>
-              <span class="version-desc" id="versionStandardDesc">Sem spellId (Milhtore/Downgrade)</span>
-            </button>
-            <button class="version-btn" data-version="custom" id="versionCustom">
-              <span class="version-title" id="versionCustomTitle">TFS 1.4.2 / 1.5 CUSTOM</span>
-              <span class="version-desc" id="versionCustomDesc">Nekiro/Downgrade (com spellId)</span>
-            </button>
-            <button class="version-btn" data-version="nekiro_std" id="versionNekiroStd">
-              <span class="version-title" id="versionNekiroTitle">TFS 1.5 NEKIRO STANDARD</span>
-              <span class="version-desc" id="versionNekiroDesc">Sem spellId; com groupCooldown</span>
-            </button>
+          <!-- Versão movida para o Modal -->
+          <div class="status-line" style="margin-top: 5px;">
+            <span id="versionDisplayLabel" style="font-size: 11px; color: #6b7280;">Versão alvo será selecionada ao
+              converter.</span>
           </div>
         </div>
 
@@ -825,6 +952,38 @@
     </div>
   </div>
 
+  <!-- Modal Attributes -->
+  <div class="modal-overlay" id="attrModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">Selecione os Atributos</div>
+      </div>
+      <div class="modal-body">
+        <div class="modal-info">
+          Selecione a versão alvo e os atributos que deseja preservar.
+        </div>
+
+        <div class="field" style="margin-bottom: 20px;">
+          <label style="display:block; margin-bottom: 6px; color: #e5e7eb; font-size: 14px;">Versão TFS Alvo:</label>
+          <select id="modalVersionSelect" class="select"
+            style="width: 100%; padding: 10px; font-size: 14px; background: rgba(15, 23, 42, 0.8);">
+            <option value="standard">TFS 1.5 MILHTORE TFS DOWNGRADE</option>
+            <option value="custom">TFS 1.4.2/1.5 CUSTOM (com spellId)</option>
+            <option value="nekiro_std">TFS 1.5 NEKIRO STANDARD</option>
+          </select>
+        </div>
+
+        <div class="checkbox-grid" id="attrGrid">
+          <!-- Checkboxes injetados via JS -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a class="link-action" id="toggleAllBtn">Marcar/Desmarcar todos</a>
+        <button class="btn btn-secondary" id="modalCancelBtn">Cancelar</button>
+        <button class="btn btn-primary" id="modalConfirmBtn">Confirmar</button>
+      </div>
+    </div>
+  </div>
 
   <script>
     class SpellData {
@@ -850,9 +1009,40 @@
         this.isConjuringSpell = false;
         this.runeItemId = null;
         this.needWeapon = false;
+        this.needWeapon = false;
         this.needCasterTargetOrDirection = null;
+        this.castSound = "";
+        this.impactSound = "";
       }
     }
+
+    const availableAttributes = [
+      { id: "spellid", label: "Spell ID (spell:spellId)" },
+      { id: "groupCooldown", label: "Group Cooldown" },
+      { id: "needTarget", label: "Need Target (casterTargetOrDirection)" },
+      { id: "needWeapon", label: "Need Weapon" },
+      { id: "mana", label: "Mana" },
+      { id: "soul", label: "Soul" },
+      { id: "cooldown", label: "Cooldown" },
+      { id: "aggressive", label: "Aggressive" },
+      { id: "needLearn", label: "Need Learn" },
+      { id: "blockWalls", label: "Block Walls" },
+      { id: "premium", label: "Premium" },
+      { id: "range", label: "Range" },
+      { id: "castSound", label: "Cast Sound" },
+      { id: "impactSound", label: "Impact Sound" }
+    ];
+
+    // Default configuration: All enabled
+    let activeAttributes = new Set(availableAttributes.map(a => a.id));
+    let pendingVersion = null;
+
+    // Modal elements
+    const attrModal = document.getElementById("attrModal");
+    const attrGrid = document.getElementById("attrGrid");
+    const toggleAllBtn = document.getElementById("toggleAllBtn");
+    const modalCancelBtn = document.getElementById("modalCancelBtn");
+    const modalConfirmBtn = document.getElementById("modalConfirmBtn");
 
     const selectFolderBtn = document.getElementById("selectFolderBtn");
     const basePathInput = document.getElementById("basePath");
@@ -867,10 +1057,12 @@
     const baseIdInput = document.getElementById("baseId");
     const tabs = document.querySelectorAll(".tab");
     const langSelect = document.getElementById("langSelect");
-    const versionStandard = document.getElementById("versionStandard");
-    const versionCustom = document.getElementById("versionCustom");
-    const versionNekiroStd = document.getElementById("versionNekiroStd");
+    const versionStandard = null;
+    const versionCustom = null;
+    const versionNekiroStd = null;
     let targetVersion = "standard";
+
+    // ... i18n object ...
     const i18n = {
       pt: {
         titleMain: "Spell Converter",
@@ -1011,31 +1203,157 @@
         console.error('Tauri API não encontrada. Rodando em modo browser?');
       }
       initPrefs();
-      if (versionStandard && versionCustom) {
-        versionStandard.addEventListener("click", () => {
-          targetVersion = "standard";
-          versionStandard.classList.add("active");
-          versionCustom.classList.remove("active");
-          if (versionNekiroStd) versionNekiroStd.classList.remove("active");
-          log("Version target: TFS 1.5 Millhiore Downgrade (no spellId)");
-        });
-        versionCustom.addEventListener("click", () => {
-          targetVersion = "custom";
-          versionCustom.classList.add("active");
-          versionStandard.classList.remove("active");
-          if (versionNekiroStd) versionNekiroStd.classList.remove("active");
-          log("Version target: TFS 1.4.2/1.5 Custom (with spellId)");
-        });
-        if (versionNekiroStd) {
-          versionNekiroStd.addEventListener("click", () => {
-            targetVersion = "nekiro_std";
-            versionNekiroStd.classList.add("active");
-            versionStandard.classList.remove("active");
-            versionCustom.classList.remove("active");
-            log("Version target: TFS 1.5 Nekiro Standard (groupCooldown, no spellId)");
-          });
+      // Old buttons removed.
+
+      // Modal Logic
+
+      // Convert Button now opens Modal!
+      convertBtn.addEventListener("click", () => {
+        if (!spells.length) {
+          alert("Carregue as spells primeiro!");
+          return;
         }
+        if (!pastaEntrada) {
+          alert("Pasta de entrada não definida.");
+          return;
+        }
+        openAttributeModal();
+      });
+
+      function openAttributeModal() {
+        renderCheckboxes();
+        attrModal.classList.add("active");
       }
+
+      // ... (close, render, confirm) ...
+
+      function closeAttributeModal() {
+        attrModal.classList.remove("active");
+      }
+
+      function renderCheckboxes() {
+        attrGrid.innerHTML = "";
+        availableAttributes.forEach(attr => {
+          const div = document.createElement("div");
+          div.className = "checkbox-item";
+          div.onclick = (e) => {
+            // Toggle checkbox when clicking the row, avoiding double toggle if clicking input directly
+            if (e.target.tagName !== 'INPUT') {
+              const cb = div.querySelector('input');
+              cb.checked = !cb.checked;
+            }
+          };
+
+          const cb = document.createElement("input");
+          cb.type = "checkbox";
+          cb.id = `attr_${attr.id}`;
+          cb.checked = activeAttributes.has(attr.id);
+
+          const span = document.createElement("span");
+          span.textContent = attr.label;
+
+          div.appendChild(cb);
+          div.appendChild(span);
+          attrGrid.appendChild(div);
+        });
+      }
+
+      toggleAllBtn.addEventListener("click", () => {
+        const cbs = attrGrid.querySelectorAll("input[type='checkbox']");
+        const allChecked = Array.from(cbs).every(c => c.checked);
+        cbs.forEach(c => c.checked = !allChecked);
+      });
+
+      modalCancelBtn.addEventListener("click", closeAttributeModal);
+
+      modalConfirmBtn.addEventListener("click", () => {
+        // 1. Get Version
+        const sel = document.getElementById("modalVersionSelect");
+        targetVersion = sel.value;
+
+        // 2. Get Attributes
+        const cbs = attrGrid.querySelectorAll("input[type='checkbox']");
+        activeAttributes.clear();
+        cbs.forEach(c => {
+          if (c.checked) {
+            const id = c.id.replace("attr_", "");
+            activeAttributes.add(id);
+          }
+        });
+
+        console.log("[Debug] Confirmed. Version:", targetVersion);
+        console.log("[Debug] Active Attributes:", Array.from(activeAttributes));
+
+        closeAttributeModal();
+
+        // 3. Start Conversion Process (moved from old convertBtn)
+        startConversionProcess();
+      });
+
+      async function startConversionProcess() {
+        const sep = pastaEntrada.includes("\\") ? "\\" : "/";
+        const outputFolder = `${pastaEntrada}${sep}converter`;
+
+        log(`Iniciando conversão de ${spells.length} spells... (Versão: ${targetVersion})`);
+        progressBar.style.width = "0%";
+
+        let i = 0;
+        const total = spells.length;
+
+        async function step() {
+          if (i >= total) {
+            progressBar.style.width = "100%";
+            log(`Concluído! Arquivos salvos em: ${outputFolder}`);
+            alert("Processo finalizado!");
+
+            // Refresh preview with last spell
+            updateTable();
+            if (spells.length) {
+              const lastSpell = spells[spells.length - 1];
+              if (lastSpell.convertedScript) codeOutput.textContent = lastSpell.convertedScript;
+            }
+            return;
+          }
+
+          const spell = spells[i];
+          let content = "";
+          let originalLua = "";
+
+          if (spell.scriptPath) {
+            const scriptAbsPath = `${pastaEntrada}${sep}scripts${sep}${spell.scriptPath}`;
+            try {
+              originalLua = await tauriAPI.invoke('read_file', { path: scriptAbsPath });
+            } catch (e) {
+              log(`[Aviso] Script não achado: ${spell.scriptPath}`);
+            }
+          }
+
+          content = generateSingleSpellRevScript(spell, originalLua);
+          spell.convertedScript = content;
+
+          let relPath = spell.scriptPath || `custom/${spell.name.replace(/\s+/g, '_')}.lua`;
+          const finalPath = `${outputFolder}${sep}${relPath}`;
+
+          try {
+            await tauriAPI.invoke('save_file', { path: finalPath, content: content });
+          } catch (e) {
+            log(`Erro ao salvar ${relPath}: ${e}`);
+          }
+
+          i++;
+          const pct = Math.round((i / total) * 100);
+          progressBar.style.width = pct + "%";
+
+          if (i % 10 === 0) {
+            setTimeout(step, 5);
+          } else {
+            step();
+          }
+        }
+
+        step();
+      }
+
       const iconEl = document.getElementById('appIcon');
       const logoText = document.querySelector('.logo-text');
       function toggleLogo() {
@@ -1161,8 +1479,11 @@
         s.premium = parseBoolAttr(node.getAttribute("premium"), false);
         s.selftarget = parseBoolAttr(node.getAttribute("selftarget"), false);
         s.cooldown = parseInt(node.getAttribute("cooldown") || "0", 10);
-        const gc = node.getAttribute("groupcooldown");
+
+        // Robust reading for groupCooldown
+        const gc = node.getAttribute("groupcooldown") || node.getAttribute("groupCooldown") || node.getAttribute("group-cooldown");
         s.groupcooldown = gc ? parseInt(gc, 10) : null;
+
         s.needlearn = parseBoolAttr(node.getAttribute("needlearn"), false);
         const agg = node.getAttribute("aggressive");
         s.aggressive = agg != null ? parseBoolAttr(agg, true) : null;
@@ -1173,6 +1494,10 @@
         const ctodAttr = node.getAttribute("casterTargetOrDirection") || node.getAttribute("casterTargetordirection") || node.getAttribute("castertargetordirection");
         s.needCasterTargetOrDirection = ctodAttr ? parseBoolAttr(ctodAttr, false) : null;
         s.scriptPath = node.getAttribute("script") || "";
+
+        // Robust reading for sounds
+        s.castSound = node.getAttribute("castSound") || node.getAttribute("castsound") || node.getAttribute("cast-sound") || "";
+        s.impactSound = node.getAttribute("impactSound") || node.getAttribute("impactsound") || node.getAttribute("impact-sound") || "";
 
         const needWpnAttr = node.getAttribute("needweapon") || node.getAttribute("needWeapon");
         if (needWpnAttr) {
@@ -1264,10 +1589,8 @@
       const propLines = [];
       propLines.push(`spell:group("${s.group || 'support'}")`);
 
-      if (targetVersion === "standard") {
-        propLines.push(`spell:id(${id})`);
-      } else {
-        propLines.push(`spell:id(${id})`);
+      propLines.push(`spell:id(${id})`);
+      if (activeAttributes.has("spellid")) {
         propLines.push(`spell:spellId(${id})`);
       }
 
@@ -1284,18 +1607,18 @@
       if (s.level) {
         propLines.push(`spell:level(${s.level})`);
       }
-      if (s.mana) {
+      if (s.mana && activeAttributes.has("mana")) {
         propLines.push(`spell:mana(${s.mana})`);
       }
-      if (s.soul !== null) {
+      if (s.soul !== null && activeAttributes.has("soul")) {
         propLines.push(`spell:soul(${s.soul})`);
       }
 
-      if (s.needWeapon) {
+      if (s.needWeapon && activeAttributes.has("needWeapon")) {
         propLines.push("spell:needWeapon(true)");
       }
 
-      if (s.premium) {
+      if (s.premium && activeAttributes.has("premium")) {
         propLines.push("spell:isPremium(true)");
       }
 
@@ -1303,29 +1626,41 @@
         propLines.push("spell:isSelfTarget(true)");
       }
 
-      if (s.range !== null) {
+      if (s.range !== null && activeAttributes.has("range")) {
         propLines.push(`spell:range(${s.range})`);
       }
 
-      if (s.needCasterTargetOrDirection === true) {
+      if (s.needCasterTargetOrDirection === true && activeAttributes.has("needTarget")) {
         propLines.push("spell:needCasterTargetOrDirection(true)");
       }
 
-      if (s.blockwalls === true) {
+      if (s.blockwalls === true && activeAttributes.has("blockWalls")) {
         propLines.push("spell:blockWalls(true)");
+      }
+
+      if (s.castSound && activeAttributes.has("castSound")) {
+        propLines.push(`spell:castSound("${s.castSound}")`);
+      }
+      if (s.impactSound && activeAttributes.has("impactSound")) {
+        propLines.push(`spell:impactSound("${s.impactSound}")`);
       }
 
       let cooldownMs = s.cooldown || 2000;
       let groupCdMs = s.groupcooldown || 2000;
 
-      propLines.push(`spell:cooldown(${Math.round(cooldownMs / 1000)} * 1000)`);
-      if (targetVersion !== "standard") {
+      if (activeAttributes.has("cooldown")) {
+        propLines.push(`spell:cooldown(${Math.round(cooldownMs / 1000)} * 1000)`);
+      }
+
+      if (activeAttributes.has("groupCooldown")) {
         propLines.push(`spell:groupCooldown(${Math.round(groupCdMs / 1000)} * 1000)`);
       }
 
-      propLines.push(`spell:needLearn(${s.needlearn ? "true" : "false"})`);
+      if (activeAttributes.has("needLearn")) {
+        propLines.push(`spell:needLearn(${s.needlearn ? "true" : "false"})`);
+      }
 
-      if (s.aggressive !== null) {
+      if (s.aggressive !== null && activeAttributes.has("aggressive")) {
         propLines.push(`spell:isAggressive(${s.aggressive ? "true" : "false"})`);
       }
 
@@ -1466,71 +1801,8 @@
       }
     });
 
-    convertBtn.addEventListener("click", async () => {
-      if (!spells.length) {
-        alert("Carregue as spells primeiro!");
-        return;
-      }
-      if (!pastaEntrada) {
-        alert("Pasta de entrada não definida.");
-        return;
-      }
-
-      const sep = pastaEntrada.includes("\\") ? "\\" : "/";
-      const outputFolder = `${pastaEntrada}${sep}converter`;
-
-      log(`Iniciando conversão de ${spells.length} spells...`);
-      progressBar.style.width = "0%";
-
-      let i = 0;
-      const total = spells.length;
-
-      async function step() {
-        if (i >= total) {
-          progressBar.style.width = "100%";
-          log(`Concluído! Arquivos salvos em: ${outputFolder}`);
-          alert("Processo finalizado!");
-          return;
-        }
-
-        const spell = spells[i];
-        let content = "";
-        let originalLua = "";
-
-        if (spell.scriptPath) {
-          const scriptAbsPath = `${pastaEntrada}${sep}scripts${sep}${spell.scriptPath}`;
-          try {
-            originalLua = await tauriAPI.invoke('read_file', { path: scriptAbsPath });
-          } catch (e) {
-            log(`[Aviso] Script não achado: ${spell.scriptPath}`);
-          }
-        }
-
-        content = generateSingleSpellRevScript(spell, originalLua);
-        spell.convertedScript = content;
-
-        let relPath = spell.scriptPath || `custom/${spell.name.replace(/\s+/g, '_')}.lua`;
-        const finalPath = `${outputFolder}${sep}${relPath}`;
-
-        try {
-          await tauriAPI.invoke('save_file', { path: finalPath, content: content });
-        } catch (e) {
-          log(`Erro ao salvar ${relPath}: ${e}`);
-        }
-
-        i++;
-        const pct = Math.round((i / total) * 100);
-        progressBar.style.width = pct + "%";
-
-        if (i % 10 === 0) {
-          setTimeout(step, 5);
-        } else {
-          step();
-        }
-      }
-
-      step();
-    });
+    // Removed old convertBtn logic since it's now in startConversionProcess
+    // convertBtn.addEventListener("click", ... );
 
     clearLogBtn.addEventListener("click", () => {
       logBox.textContent = "";
