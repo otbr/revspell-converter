@@ -382,40 +382,9 @@
       border-collapse: collapse;
     }
 
-    .spells-list th:nth-child(1) {
-      width: 15%;
-    }
 
-    .spells-list th:nth-child(2) {
-      width: 18%;
-    }
-
-    .spells-list th:nth-child(3) {
-      width: 10%;
-    }
-
-    .spells-list th:nth-child(4) {
-      width: 6%;
-    }
-
-    .spells-list th:nth-child(5) {
-      width: 6%;
-    }
-
-    .spells-list th:nth-child(6) {
-      width: 5%;
-    }
-
-    .spells-list th:nth-child(7) {
-      width: 6%;
-    }
-
-    .spells-list th:nth-child(8) {
-      width: 8%;
-    }
-
-    .spells-list th:nth-child(9) {
-      width: 20%;
+    .spells-list th:nth-child(n) {
+      width: auto !important;
     }
 
     th,
@@ -423,6 +392,7 @@
       padding: 8px 12px;
       text-align: left;
       border-bottom: 1px solid rgba(31, 41, 55, 1);
+      white-space: nowrap;
     }
 
     th {
@@ -820,7 +790,7 @@
         </div>
         <div class="title-block">
           <h1 id="titleMain">Spell Converter</h1>
-          <div class="subtitle" id="subtitleMain">TFS 1.5 · 8.60 · XML → RevScript (Tauri)</div>
+          <div class="subtitle" id="subtitleMain">TFS 1.x apartir do 1.3+ compativel</div>
         </div>
         <div class="toolbar">
           <select id="langSelect" class="select">
@@ -879,9 +849,29 @@
                 <th id="thGroup">Grupo</th>
                 <th id="thLvl">Lvl</th>
                 <th id="thMana">Mana</th>
+                <th id="thSoul">Soul</th>
                 <th id="thPrem">Prem</th>
                 <th id="thRange">Range</th>
                 <th id="thCd">CD</th>
+                <th id="thGrpCd">GrpCD</th>
+                <th id="thML">ML</th>
+                <th id="thChg">Chg</th>
+                <th id="thBlkTyp">BlkTyp</th>
+                <th id="thSecGrp">SecGrp</th>
+                <th id="thSecLrn">SecLrn</th>
+                <th id="thShwDesc">ShwDesc</th>
+                <th id="thTgt">NeedTgt</th>
+                <th id="thWpn">NeedWpn</th>
+                <th id="thDir">Dir</th>
+                <th id="thPName">PName</th>
+                <th id="thParams">Params</th>
+                <th id="thAfu">AFU</th>
+                <th id="thAgg">Agg</th>
+                <th id="thLearn">Learn</th>
+                <th id="thBlock">Block</th>
+                <th id="thSelf">Self</th>
+                <th id="thCastSnd">CastSnd</th>
+                <th id="thImpSnd">ImpSnd</th>
                 <th id="thScript">Script</th>
               </tr>
             </thead>
@@ -1013,6 +1003,16 @@
         this.needCasterTargetOrDirection = null;
         this.castSound = "";
         this.impactSound = "";
+        this.allowfaruse = null;
+        this.direction = false;
+        this.playernameparam = false;
+        this.params = false;
+        this.magiclevel = 0;
+        this.charges = 0;
+        this.blocktype = "";
+        this.secondarygroup = "";
+        this.secondaryneedlearn = false;
+        this.showInDescription = null;
       }
     }
 
@@ -1030,7 +1030,18 @@
       { id: "premium", label: "Premium" },
       { id: "range", label: "Range" },
       { id: "castSound", label: "Cast Sound" },
-      { id: "impactSound", label: "Impact Sound" }
+      { id: "castSound", label: "Cast Sound" },
+      { id: "impactSound", label: "Impact Sound" },
+      { id: "allowFarUse", label: "Allow Far Use" },
+      { id: "direction", label: "Need Direction" },
+      { id: "playerNameParam", label: "Player Name Param" },
+      { id: "params", label: "Has Params" },
+      { id: "magicLevel", label: "Magic Level" },
+      { id: "charges", label: "Charges" },
+      { id: "blockType", label: "Block Type" },
+      { id: "secondaryGroup", label: "Sec. Group" },
+      { id: "secondaryNeedLearn", label: "Sec. Learn" },
+      { id: "showInDescription", label: "Show Desc." }
     ];
 
     // Default configuration: All enabled
@@ -1066,7 +1077,7 @@
     const i18n = {
       pt: {
         titleMain: "Spell Converter",
-        subtitleMain: "TFS 1.5 · 8.60 · XML → RevScript (Tauri)",
+        subtitleMain: "TFS 1.x apartir do 1.3+ compativel",
         inputCardTitle: "Entrada",
         stepBadge: "Passo 1 · spells.xml",
         selectLabel: "Selecione a pasta contendo <b>spells.xml</b>",
@@ -1095,7 +1106,7 @@
       },
       en: {
         titleMain: "Spell Converter",
-        subtitleMain: "TFS 1.5 · 8.60 · XML → RevScript (Tauri)",
+        subtitleMain: "TFS 1.x (1.3+ compatible)",
         inputCardTitle: "Input",
         stepBadge: "Step 1 · spells.xml",
         selectLabel: "Select the folder containing <b>spells.xml</b>",
@@ -1417,6 +1428,12 @@
 
         const premiumIcon = s.premium ? (langSelect.value === "en" ? "Yes" : "Sim") : "-";
         const cooldownSec = s.cooldown ? `${(s.cooldown / 1000).toFixed(1)}s` : "-";
+
+        // Helper for boolean
+        const boolIcon = (val) => val ? "<span style='color:#22c55e'>✔</span>" : "<span style='color:#374151'>-</span>";
+        // Helper for text
+        const textVal = (val) => val ? val : "<span style='color:#374151'>-</span>";
+
         const scriptName = s.scriptPath
           ? s.scriptPath.split('/').pop().split('\\').pop().replace('.lua', '')
           : "-";
@@ -1427,9 +1444,29 @@
           <td><span class="${groupClass}">${s.group || "-"}</span></td>
           <td>${s.level || "-"}</td>
           <td style="color: #38bdf8;">${s.mana || "-"}</td>
+          <td>${s.soul || "-"}</td>
           <td style="text-align: center;">${premiumIcon}</td>
           <td style="text-align: center;">${s.range || "-"}</td>
           <td style="color: #facc15; font-size: 12px;">${cooldownSec}</td>
+          <td style="color: #facc15; font-size: 12px;">${s.groupcooldown ? (s.groupcooldown / 1000).toFixed(1) + 's' : '-'}</td>
+          <td>${s.magiclevel || "-"}</td>
+          <td>${s.charges || "-"}</td>
+          <td style="font-size:10px;">${textVal(s.blocktype)}</td>
+          <td style="font-size:10px;">${textVal(s.secondarygroup)}</td>
+          <td style="text-align: center;">${boolIcon(s.secondaryneedlearn)}</td>
+          <td style="text-align: center;">${boolIcon(s.showInDescription)}</td>
+          <td style="text-align: center;">${boolIcon(s.needCasterTargetOrDirection)}</td>
+          <td style="text-align: center;">${boolIcon(s.needWeapon)}</td>
+          <td style="text-align: center;">${boolIcon(s.direction)}</td>
+          <td style="text-align: center;">${boolIcon(s.playernameparam)}</td>
+          <td style="text-align: center;">${boolIcon(s.params)}</td>
+          <td style="text-align: center;">${boolIcon(s.allowfaruse)}</td>
+          <td style="text-align: center;">${boolIcon(s.aggressive)}</td>
+          <td style="text-align: center;">${boolIcon(s.needlearn)}</td>
+          <td style="text-align: center;">${boolIcon(s.blockwalls)}</td>
+          <td style="text-align: center;">${boolIcon(s.selftarget)}</td>
+          <td style="font-size:10px;">${textVal(s.castSound)}</td>
+          <td style="font-size:10px;">${textVal(s.impactSound)}</td>
           <td style="color: #9ca3af; font-size: 11px; font-family: monospace;">${scriptName}</td>
         `;
         tableBody.appendChild(tr);
@@ -1491,13 +1528,28 @@
         s.blockwalls = bw != null ? parseBoolAttr(bw, false) : null;
         const rangeAttr = node.getAttribute("range");
         s.range = rangeAttr ? parseInt(rangeAttr, 10) : null;
-        const ctodAttr = node.getAttribute("casterTargetOrDirection") || node.getAttribute("casterTargetordirection") || node.getAttribute("castertargetordirection");
+        const ctodAttr = node.getAttribute("casterTargetOrDirection") || node.getAttribute("casterTargetordirection") || node.getAttribute("castertargetordirection") || node.getAttribute("needtarget") || node.getAttribute("needTarget");
         s.needCasterTargetOrDirection = ctodAttr ? parseBoolAttr(ctodAttr, false) : null;
         s.scriptPath = node.getAttribute("script") || "";
 
         // Robust reading for sounds
         s.castSound = node.getAttribute("castSound") || node.getAttribute("castsound") || node.getAttribute("cast-sound") || "";
         s.impactSound = node.getAttribute("impactSound") || node.getAttribute("impactsound") || node.getAttribute("impact-sound") || "";
+
+        const afu = node.getAttribute("allowfaruse") || node.getAttribute("allowFarUse");
+        s.allowfaruse = afu != null ? parseBoolAttr(afu, true) : null;
+
+        s.direction = parseBoolAttr(node.getAttribute("direction"), false);
+        s.playernameparam = parseBoolAttr(node.getAttribute("playernameparam"), false);
+        s.params = parseBoolAttr(node.getAttribute("params"), false);
+
+        s.magiclevel = parseInt(node.getAttribute("magiclevel") || "0", 10);
+        s.charges = parseInt(node.getAttribute("charges") || "0", 10);
+        s.blocktype = node.getAttribute("blocktype") || "";
+        s.secondarygroup = node.getAttribute("secondarygroup") || "";
+        s.secondaryneedlearn = parseBoolAttr(node.getAttribute("secondaryneedlearn"), false);
+        const shwDesc = node.getAttribute("showInDescription") || node.getAttribute("showindescription");
+        s.showInDescription = shwDesc !== null ? parseBoolAttr(shwDesc, true) : null;
 
         const needWpnAttr = node.getAttribute("needweapon") || node.getAttribute("needWeapon");
         if (needWpnAttr) {
@@ -1662,6 +1714,43 @@
 
       if (s.aggressive !== null && activeAttributes.has("aggressive")) {
         propLines.push(`spell:isAggressive(${s.aggressive ? "true" : "false"})`);
+      }
+
+      if (s.allowfaruse !== null && activeAttributes.has("allowFarUse")) {
+        propLines.push(`spell:allowFarUse(${s.allowfaruse ? "true" : "false"})`);
+      }
+
+      if (s.direction && activeAttributes.has("direction")) {
+        propLines.push("spell:needDirection(true)");
+      }
+
+      if (s.playernameparam && activeAttributes.has("playerNameParam")) {
+        propLines.push("spell:playerNameParam(true)");
+      }
+
+      if (s.params && activeAttributes.has("params")) {
+        propLines.push("spell:hasParams(true)");
+      }
+
+      if (s.magiclevel > 0 && activeAttributes.has("magicLevel")) {
+        propLines.push(`spell:magicLevel(${s.magiclevel})`);
+      }
+      if (s.charges > 0 && activeAttributes.has("charges")) {
+        propLines.push(`spell:charges(${s.charges})`); // Or runeCharges if rune
+      }
+      if (s.blocktype && activeAttributes.has("blockType")) {
+        propLines.push(`spell:blockType("${s.blocktype}")`);
+      }
+      if (s.secondarygroup && activeAttributes.has("secondaryGroup")) {
+        propLines.push(`spell:secondaryGroup("${s.secondarygroup}")`);
+      }
+      if (s.secondaryneedlearn && activeAttributes.has("secondaryNeedLearn")) {
+        propLines.push("spell:secondaryNeedLearn(true)");
+      }
+      if (s.showInDescription === false && activeAttributes.has("showInDescription")) {
+        propLines.push("spell:showInDescription(false)");
+      } else if (s.showInDescription === true && activeAttributes.has("showInDescription")) {
+        propLines.push("spell:showInDescription(true)");
       }
 
       if (vocStr) {
